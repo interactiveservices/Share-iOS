@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'Share_Example' do
+  pod 'Share', :path => '../'
+
+  target 'Share_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
