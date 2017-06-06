@@ -15,9 +15,10 @@ extension Share {
         
         public typealias Item = (letter:Letter, vc:UIViewController)
         
-        typealias Retainee = Mail
-        var objectToRetain:Mail?
-        
+        public static func shareBy(item: (letter: Share.Mail.Letter, vc: UIViewController)) {
+            Mail().shareBy(item: item)
+        }
+
         public struct Letter {
             var subject:String
             var recipients:[String]
@@ -26,7 +27,7 @@ extension Share {
             var body:String
             var bodyIsHTML = false
             var attachments:[Attachment]
-            init(subject:String, recipients:[String],ccRecipients:[String]? = nil, bccRecipients:[String]? = nil, body:String, bodyIsHTML:Bool = false, attachments:[Attachment] = [])
+            public init(subject:String, recipients:[String],ccRecipients:[String]? = nil, bccRecipients:[String]? = nil, body:String, bodyIsHTML:Bool = false, attachments:[Attachment] = [])
             {
                 self.subject = subject
                 self.recipients = recipients
@@ -44,25 +45,24 @@ extension Share {
             var fileName:String
         }
         
-        public static func shareBy(item: (letter: Share.Mail.Letter, vc: UIViewController)) {
-            Mail().shareBy(item: item)
-        }
+        typealias Retainee = Mail
+        var objectToRetain:Mail?        
     }
 }
 
 extension Share.Mail: Retainer {
     
-    fileprivate func shareBy(item: (letter: Share.Mail.Letter, vc: UIViewController)) {
+    fileprivate func shareBy(item: Item) {
         
-        self.retainSelf()
         
         let mvc = buildMailController(with: item.letter)
         mvc.mailComposeDelegate = self
+        retainSelf()
         
         item.vc.present(mvc, animated: true, completion: nil)
     }
     
-    func buildMailController(with letter:Letter)->MFMailComposeViewController{
+    private func buildMailController(with letter:Letter)->MFMailComposeViewController{
         
         let mvc = MFMailComposeViewController()
         
@@ -86,11 +86,11 @@ extension Share.Mail: MFMailComposeViewControllerDelegate {
             if let error = error {
                 print("error sending mail:\(error)")
             }
-            self.releaseSelf()
-            controller.delegate = nil
+            controller.mailComposeDelegate = nil
             controller.dismiss(animated: true, completion: nil)
         default:
             break
         }
+        releaseSelf()
     }
 }
