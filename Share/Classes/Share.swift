@@ -9,11 +9,23 @@
 import Foundation
 
 public protocol Sharer {
+    
     associatedtype Item
-    static func shareBy(item:Item)
+    associatedtype Sender
+    associatedtype ShareError
+    
+    typealias Completion = (sharer:Sender, item:Item, result:ShareResult<ShareError>)
+    
+    func shareBy(item:Item, completion:((Completion)->Void)?)
 }
 
-public class Share {
+public enum ShareResult<ErrorType> {
+    case cancel
+    case success
+    case error(ErrorType)
+}
+
+public struct Share {
     
     
 }
