@@ -10,21 +10,10 @@ import UIKit
 import Share
 
 class ViewController: UIViewController {
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
 
-        
-        
-        
-    }
-    
     @IBAction func share(){
-        let shareDialog = UIAlertController(title: "Share", message: "select share service", preferredStyle: .actionSheet)
+        let shareDialog = UIAlertController(title: "Share", message: "Select sharing service", preferredStyle: .actionSheet)
         
-        func actionWith(title:String,handler:@escaping (UIAlertAction)->Void)->UIAlertAction {
-            return UIAlertAction(title: title, style: .default, handler: handler)
-        }
         
         shareDialog.addAction(actionWith(title: "e-mail"){ _ in
             self.shareByMail()}
@@ -34,9 +23,17 @@ class ViewController: UIViewController {
             self.shareByMessage()
         })
         
+        shareDialog.addAction(actionWith(title: "ActivityViewController"){ _ in
+            self.shareByActivity()
+        })
         
+        shareDialog.addAction(actionWith(title: "Cancel", style: .cancel))
         
         present(shareDialog, animated: true, completion: nil)
+    }
+
+    func actionWith(title:String, style:UIAlertActionStyle = UIAlertActionStyle.default, handler: ((UIAlertAction)->Void)? = nil)->UIAlertAction {
+        return UIAlertAction(title: title, style: style, handler: handler)
     }
     
     //MARK: - Share
@@ -73,6 +70,13 @@ class ViewController: UIViewController {
             print("finished with:\nsharer\(sharer)\nitem:\(item)\nresult:\(result)")
             
         }
+    }
+    
+    func shareByActivity(){
+        let shareElements:[Any] = ["stupid text",URL(string:"http://www.yandex.ru")!,#imageLiteral(resourceName: "sendimage"), Date()]
+        Share.Activity().shareBy(item:(shareElements,
+                                       self)) { sharer,item,result in
+            print("finished with:\nsharer\(sharer)\nitem:\(item)\nresult:\(result)")}
     }
     
 }
