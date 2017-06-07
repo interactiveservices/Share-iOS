@@ -27,6 +27,10 @@ class ViewController: UIViewController {
             self.shareByActivity()
         })
         
+        shareDialog.addAction(actionWith(title: "Instagram") { _ in
+            self.shareByInstagram()
+        })
+        
         shareDialog.addAction(actionWith(title: "Cancel", style: .cancel))
         
         present(shareDialog, animated: true, completion: nil)
@@ -37,6 +41,15 @@ class ViewController: UIViewController {
     }
     
     //MARK: - Share
+    
+    func shareByInstagram(){
+        
+        let asset = Share.Instagram.Asset.image(#imageLiteral(resourceName: "sendimage"))
+        
+        Share.Instagram().shareBy(item: asset) {  sharer,item,result in
+            print("finished with:\nsharer\(sharer)\nitem:\(item)\nresult:\(result)")
+        }
+    }
     
     func shareByMessage(){
         let attachment = Share.IMessage.Attachement.data(data: UIImagePNGRepresentation(#imageLiteral(resourceName: "sendimage"))!,
