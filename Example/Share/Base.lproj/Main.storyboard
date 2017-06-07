@@ -26,6 +26,9 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qp7-Y4-sgT">
                                 <rect key="frame" x="16" y="518" width="40" height="30"/>
                                 <state key="normal" title="Share"/>
+                                <connections>
+                                    <action selector="share" destination="vXZ-lx-hvc" eventType="touchUpInside" id="XBs-5K-sh9"/>
+                                </connections>
                             </button>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sendimage" translatesAutoresizingMaskIntoConstraints="NO" id="RjP-6F-3UZ">
                                 <rect key="frame" x="16" y="28" width="288" height="288"/>

@@ -20,14 +20,21 @@ extension Share {
         public typealias Sender = IMessage
         public typealias ShareError = MessageError
         
-        public func shareBy(item:Item, completion:((Completion)->Void)?){
+        public func shareBy(item:Item, completion:((Completion)->Void)? = nil){
+            self.completion = completion
+            self.shareItem  = item
+            guard  MFMessageComposeViewController.canSendText() else {
+               self.callCompletion(ShareResult<MessageError>.error(.canNotSendMessages))
+               return
+            }
+            
             let mvc = buildMessage(with: item.message)
             
             self.shareItem = item
             mvc.messageComposeDelegate = self
             retainSelf()
             
-            item.vc.present(mvc, animated: true, completion: nil)
+            self.shareItem.vc.present(mvc, animated: true, completion: nil)
         }
         
         public struct  Message {
