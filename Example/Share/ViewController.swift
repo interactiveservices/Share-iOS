@@ -44,7 +44,7 @@ class ViewController: UIViewController {
     
     func shareByInstagram(){
         
-        let asset = Share.Instagram.Asset.image(#imageLiteral(resourceName: "sendimage"))
+        let asset = Share.Instagram.Asset.image(#imageLiteral(resourceName: "sendimage"), view: self.view)
         
         Share.Instagram().shareBy(item: asset) {  sharer,item,result in
             print("finished with:\nsharer\(sharer)\nitem:\(item)\nresult:\(result)")
@@ -86,7 +86,7 @@ class ViewController: UIViewController {
     }
     
     func shareByActivity(){
-        let shareElements:[Any] = ["stupid text",URL(string:"http://www.yandex.ru")!,#imageLiteral(resourceName: "sendimage"), Date()]
+        let shareElements:[Any] = ["stupid text",URL(string:"http://be-interactive.ru/mobile/")!,#imageLiteral(resourceName: "sendimage"), Date()]
         Share.Activity().shareBy(item:(shareElements,
                                        self)) { sharer,item,result in
             print("finished with:\nsharer\(sharer)\nitem:\(item)\nresult:\(result)")}
