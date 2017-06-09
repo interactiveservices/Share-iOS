@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
   s.name             = 'Share'
   s.version          = '0.1.0'
-  s.summary          = 'A short description of Share.'
+  s.summary          = 'Easy way to share by some services'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -17,21 +17,29 @@ Pod::Spec.new do |s|
 #   * Write the description between the DESC delimiters below.
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
-  s.description      = <<-DESC
-TODO: Add long description of the pod here.
-                       DESC
-
-  s.homepage         = 'https://github.com/nikolay.shubenkov@gmail.com/Share'
+  s.homepage         = 'https://github.com/interactiveservices/Share-iOS.git'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'nikolay.shubenkov@gmail.com' => 'n.shubenkov@be-interactive.ru' }
-  s.source           = { :git => 'https://github.com/nikolay.shubenkov@gmail.com/Share.git', :tag => s.version.to_s }
+  s.source           = {
+    :git => 'https://github.com/interactiveservices/Share-iOS.git', :tag => s.version.to_s,
+    :submodules => true
+  }
+  s.frameworks       = 'UIKit','MessageUI'
+  s.platform         = :ios
+
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '8.0'
 
-  s.source_files = 'Share/Classes/**/*'
-  
+  s.source_files = 'Share/Classes/{Core,Base}/*'
+
+  #submodules
+  s.subspec 'VK' do |vk|
+    vk.source_files = 'Share/Classes/Vk/*'
+    vk.dependency 'VK-ios-sdk', '~> 1.4'
+  end
+
   # s.resource_bundles = {
   #   'Share' => ['Share/Assets/*.png']
   # }

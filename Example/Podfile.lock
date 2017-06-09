@@ -1,5 +1,9 @@
 PODS:
-  - Share (0.1.0)
+  - Share (0.1.0):
+    - Share/VK (= 0.1.0)
+  - Share/VK (0.1.0):
+    - VK-ios-sdk (~> 1.4)
+  - VK-ios-sdk (1.4.6)
 
 DEPENDENCIES:
   - Share (from `../`)
@@ -9,7 +13,8 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  Share: f2cccbe18e450a388073da4e11e550e0af18d171
+  Share: 7d31f835ec6cdf62c8617454efe669a6213111d6
+  VK-ios-sdk: 7fd48bc5aaa6b96c3197c1987eb6593f2ea67331
 
 PODFILE CHECKSUM: fab9bb9e132d04653d5dc7302be9b37f3ac15bf8
 

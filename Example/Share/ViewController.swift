@@ -60,6 +60,8 @@ class ViewController: UIViewController {
                                              body: "Hello. How are you?",
                                              attachments: [attachment])
         
+        Share.IMessage.Message(recipients: ["somebodyphonenumber"],body:"Hello, man!")
+        
         Share.IMessage().shareBy(item: (message,self)) {  sharer,item,result in
             print("finished with:\nsharer\(sharer)\nitem:\(item)\nresult:\(result)")
         }
