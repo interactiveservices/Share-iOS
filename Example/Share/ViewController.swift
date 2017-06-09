@@ -10,14 +10,14 @@ import UIKit
 import Share
 
 class ViewController: UIViewController {
-
+    
     @IBAction func share(){
         let shareDialog = UIAlertController(title: "Share", message: "Select sharing service", preferredStyle: .actionSheet)
         
         
         shareDialog.addAction(actionWith(title: "e-mail"){ _ in
-            self.shareByMail()}
-        )
+            self.shareByMail()
+        })
         
         shareDialog.addAction(actionWith(title: "iMessage") { _ in
             self.shareByMessage()
@@ -31,16 +31,37 @@ class ViewController: UIViewController {
             self.shareByInstagram()
         })
         
+        shareDialog.addAction(actionWith(title: "Vk") { _ in
+            self.shareByVk()
+        })
+        
         shareDialog.addAction(actionWith(title: "Cancel", style: .cancel))
         
         present(shareDialog, animated: true, completion: nil)
     }
-
+    
     func actionWith(title:String, style:UIAlertActionStyle = UIAlertActionStyle.default, handler: ((UIAlertAction)->Void)? = nil)->UIAlertAction {
         return UIAlertAction(title: title, style: style, handler: handler)
     }
     
     //MARK: - Share
+    
+    func shareByVk(){
+        
+        let sharer = Share.Vk(authoriser: (UIApplication.shared.delegate as? AppDelegate)?.vkAuthorizer,
+                              presentingController: self)
+        
+        let vkContent = Share.Vk.Item(text: "How are you?",
+                                      images: [#imageLiteral(resourceName: "sendimage")],//)//,
+                                      link: ("Be-Interactive",
+                                             URL(string:"http://be-interactive.ru/mobile")!))
+        
+        sharer.shareBy(item: vkContent){ sharer, item, result in
+            
+            print("finished with:\nsharer\(sharer)\nitem:\(item)\nresult:\(result)")
+            
+        }
+    }
     
     func shareByInstagram(){
         
@@ -59,8 +80,6 @@ class ViewController: UIViewController {
                                              subject: "No subject",
                                              body: "Hello. How are you?",
                                              attachments: [attachment])
-        
-        Share.IMessage.Message(recipients: ["somebodyphonenumber"],body:"Hello, man!")
         
         Share.IMessage().shareBy(item: (message,self)) {  sharer,item,result in
             print("finished with:\nsharer\(sharer)\nitem:\(item)\nresult:\(result)")
@@ -91,7 +110,7 @@ class ViewController: UIViewController {
         let shareElements:[Any] = ["stupid text",URL(string:"http://be-interactive.ru/mobile/")!,#imageLiteral(resourceName: "sendimage"), Date()]
         Share.Activity().shareBy(item:(shareElements,
                                        self)) { sharer,item,result in
-            print("finished with:\nsharer\(sharer)\nitem:\(item)\nresult:\(result)")}
+                                        print("finished with:\nsharer\(sharer)\nitem:\(item)\nresult:\(result)")}
     }
     
 }
