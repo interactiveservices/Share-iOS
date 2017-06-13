@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
 #   * Try to keep it short, snappy and to the point.
 #   * Write the description between the DESC delimiters below.
 #   * Finally, don't worry about the indent, CocoaPods strips it!
-
+ 
   s.homepage         = 'https://github.com/interactiveservices/Share-iOS.git'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
@@ -32,19 +32,18 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target = '8.0'
 
-  s.source_files = 'Share/Classes/{Core,Base}/*'
-
-  #submodules
-  s.subspec 'VK' do |vk|
-    vk.source_files = 'Share/Classes/Vk/*'
-    vk.dependency 'VK-ios-sdk', '~> 1.4'
+  s.subspec 'Core' do |s|
+    s.source_files = 'Share/Classes/{Core,Base}/*'
   end
 
-  # s.resource_bundles = {
-  #   'Share' => ['Share/Assets/*.png']
-  # }
+  s.default_subspec = 'Core'
 
-  # s.public_header_files = 'Pod/Classes/**/*.h'
-  # s.frameworks = 'UIKit', 'MapKit'
-  # s.dependency 'AFNetworking', '~> 2.3'
+  #submodules
+  s.subspec 'Vk' do |sp|
+
+    sp.source_files = 'Share/Classes/Vk/*'
+    sp.dependency 'Share/Core'
+    sp.dependency 'VK-ios-sdk', '~> 1.4'
+  end
+
 end
