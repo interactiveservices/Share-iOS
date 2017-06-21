@@ -1,7 +1,9 @@
 use_frameworks!
 
 target 'Share_Example' do
-  pod 'Share', :path => '../'
+  pod 'Share/Core', :path => '../'
+  pod 'Share/Vk', :path => '../'
+  pod 'Share/Facebook', :path=>'../'
 
   target 'Share_Tests' do
     inherit! :search_paths

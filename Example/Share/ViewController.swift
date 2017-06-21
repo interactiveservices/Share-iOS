@@ -12,8 +12,8 @@ import Share
 class ViewController: UIViewController {
     
     @IBAction func share(){
-        let shareDialog = UIAlertController(title: "Share", message: "Select sharing service", preferredStyle: .actionSheet)
         
+        let shareDialog = UIAlertController(title: "Share", message: "Select sharing service", preferredStyle: .actionSheet)
         
         shareDialog.addAction(actionWith(title: "e-mail"){ _ in
             self.shareByMail()
@@ -35,6 +35,14 @@ class ViewController: UIViewController {
             self.shareByVk()
         })
         
+        shareDialog.addAction(actionWith(title: "Vk user info") { _ in
+            self.retrieveVkUserInfo()
+        })
+        
+        shareDialog.addAction(actionWith(title: "Facebook user info") { _ in
+            self.retrieveFbUserInfo()
+        })
+        
         shareDialog.addAction(actionWith(title: "Cancel", style: .cancel))
         
         present(shareDialog, animated: true, completion: nil)
@@ -45,6 +53,42 @@ class ViewController: UIViewController {
     }
     
     //MARK: - Share
+    
+    func retrieveFbUserInfo(){
+        
+        let sharer = Share.Facebook(authoriser: (UIApplication.shared.delegate as? AppDelegate)?.facebookAuthorizer)
+        
+        sharer.getUserInfo { result in
+            
+            switch result {
+
+            case .success(let data): self.show(title: "Успех", message: data.description)
+            case .error(let error): self.show(title: "Ошибка", message: "\(error)")
+                
+            }
+            print("Recieved FB User Info with:\n\(result)")
+            
+        }
+        
+    }
+    
+    func retrieveVkUserInfo(){
+        
+        let sharer = Share.Vk(authoriser: (UIApplication.shared.delegate as? AppDelegate)?.vkAuthorizer,
+                              presentingController: self)
+        
+        sharer.getUserInfoWith { result in
+            
+            switch result {
+
+            case .success(let data): self.show(title: "Успех", message: data.description)
+                
+            case .error(let error): self.show(title:"Ошибка", message: "\(error)")
+                
+            }
+            print("Recieved VK User Info with:\n\(result)")
+        }
+    }
     
     func shareByVk(){
         

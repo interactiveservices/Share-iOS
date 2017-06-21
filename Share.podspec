@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
 #   * Try to keep it short, snappy and to the point.
 #   * Write the description between the DESC delimiters below.
 #   * Finally, don't worry about the indent, CocoaPods strips it!
- 
+
   s.homepage         = 'https://github.com/interactiveservices/Share-iOS.git'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
@@ -44,6 +44,18 @@ Pod::Spec.new do |s|
     sp.source_files = 'Share/Classes/Vk/*'
     sp.dependency 'Share/Core'
     sp.dependency 'VK-ios-sdk', '~> 1.4'
+
+  end
+
+
+  s.subspec 'Facebook' do |sp|
+
+    sp.source_files = 'Share/Classes/Facebook/*'
+    sp.dependency 'Share/Core'
+    sp.dependency 'FacebookCore'
+    sp.dependency 'FacebookLogin'
+    sp.dependency 'FacebookShare'
+
   end
 
 end

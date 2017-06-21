@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>Share</string>
+	<string>Зашарь</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -26,10 +26,10 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>vk</string>
+			<string>vk6067711</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>vk???</string>
+				<string>vk6067711</string>
 			</array>
 		</dict>
 	</array>

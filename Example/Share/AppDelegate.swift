@@ -8,20 +8,26 @@
 
 import UIKit
 import Share
+import FacebookShare
 
 @UIApplicationMain
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-    static let vkKey = ""
+    static let vkKey = "6067711"
     
     var window: UIWindow?
     
-    lazy var vkAuthorizer:Share.VkAuthoriser = {
-        return Share.VkAuthoriser(key: AppDelegate.vkKey)
-    }()
+    var vkAuthorizer:Share.VkAuthoriser!
+    
+    var facebookAuthorizer = Share.FacebookAuthoriser()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        
+        vkAuthorizer = Share.VkAuthoriser(key: AppDelegate.vkKey)        
+
+        _ = facebookAuthorizer.application(application,
+                                           didFinishLaunchingWithOptions: launchOptions)
         
         return true
     }
@@ -29,17 +35,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
         
         if #available(iOS 9.0, *) {
-            _ = vkAuthorizer.application(app, open: url, options: options)
+            return application(app,
+                               open: url,
+                               sourceApplication: (options[UIApplicationOpenURLOptionsKey.sourceApplication] as? String) ?? "",
+                               annotation: (options[UIApplicationOpenURLOptionsKey.annotation] as? String) ?? "")
         } else {
-            // Fallback on earlier versions
+            return true
         }
-        return true
         
     }
     
     func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
 
-        _ = vkAuthorizer.application(application, open: url, sourceApplication: sourceApplication, annotation: annotation)
+        if vkAuthorizer.application(application, open: url, sourceApplication: sourceApplication, annotation: annotation) {
+            return  true
+        }
+        
+        if facebookAuthorizer.application(application, open: url, sourceApplication: sourceApplication, annotation: annotation) {
+            return true
+        }
         
         return true
     }
@@ -47,6 +61,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidBecomeActive(_ application: UIApplication) {
         
         vkAuthorizer.applicationDidBecomeActive(application)
+        facebookAuthorizer.applicationDidBecomeActive(application)
+        
     }
 
 }
