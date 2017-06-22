@@ -58,7 +58,7 @@ extension Share {
                 }
             }
             
-            init(path:String, method:String = "GET", parameters:[String:Any]? = nil, paging:Paging? = nil){
+            public init(path:String, method:String = "GET", parameters:[String:Any]? = nil, paging:Paging? = nil){
                 
                 self.path = path
                 self.method = method
@@ -157,7 +157,7 @@ extension Share {
                     //add new data to old values
                     if let info = request.paging {
                         
-                        let oldValues:[Any] = data.fbData(for: info!.pagingKey) ?? [Any]()
+                        let oldValues:[Any] = data.fb_data(for: info!.pagingKey) ?? [Any]()
                         let newValues:[Any] = request.result[info!.pagingKey] as?  [Any] ?? [Any]()
                         
                         request.result[info!.pagingKey] = newValues + oldValues
@@ -168,7 +168,7 @@ extension Share {
                     let shouldRequestNextPage = request.decrementPage()
                     
                     if shouldRequestNextPage,
-                        let nextKey = data.fbNextLink {
+                        let nextKey = data.fb_nextLink {
                         
                         request.path = nextKey
                         self.call(request: request, success: success, failure: failure)
@@ -180,7 +180,7 @@ extension Share {
                     
                 default:
                     assert(false)
-                    failure(.failed(NSError(domain: "Unknown error", code: -2390523, userInfo: nil)))
+                    failure(.failed(NSError.unknownFacebookError()))
                     
                 }
             }
@@ -192,18 +192,24 @@ extension Share {
 
 extension Dictionary where Key == String  {
     
-    func fbData(for key:String)->[Any]? {
+    func fb_data(for key:String)->[Any]? {
         return (self["data"] as? [String:Any])?[key] as? [Any]
     }
     
-    var fbNextLink:String? {
+    var fb_nextLink:String? {
         return (self["paging"] as? [String:Any])?["next"] as? String
     }
     
-    var prevLink:String? {
+    var fb_prevLink:String? {
         return (self["paging"] as? [String:Any])?["previous"] as? String
     }
 }
 
-
+extension NSError {
+    
+    static func unknownFacebookError()->NSError
+    {
+        return NSError(domain: "Share.Facebook", code: -2390523, userInfo: nil)
+    }
+}
 

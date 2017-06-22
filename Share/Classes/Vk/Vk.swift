@@ -82,7 +82,7 @@ extension Share {
                     
                     guard var info = (result?.json as? [[String : Any]])?.first else {
                         
-                        completion(UserData.error(VkShareError.other(NSError())))
+                        completion(UserData.error(VkShareError.other(NSError.unknownVkError())))
                         
                         return
                     }
@@ -222,4 +222,12 @@ extension Share.Vk:Retainer {
     
     typealias Retainee = Share.Vk
     
+}
+
+extension NSError {
+    
+    static func unknownVkError()->NSError
+    {
+        return NSError(domain: "Share.Vk", code: -2390523, userInfo: nil)
+    }
 }

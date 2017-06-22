@@ -20,3 +20,14 @@ extension UIViewController {
     }
     
 }
+
+extension URL {
+    
+    static let awesomeLink = URL(string:"http://be-interactive.ru/mobile")!
+}
+
+extension String {
+    
+    static let beInteractiveHashTag = "#beinteractive"
+    
+}

@@ -16,11 +16,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     static let vkKey = "6067711"
     
+    static var delegate:AppDelegate {
+        return UIApplication.shared.delegate as! AppDelegate
+    }
+    
     var window: UIWindow?
     
     var vkAuthorizer:Share.VkAuthoriser!
     
-    var facebookAuthorizer = Share.FacebookAuthoriser()
+    var facebookAuthorizer = Share.FacebookAuthoriser(permissions: ["public_profile","email","user_friends"])
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         

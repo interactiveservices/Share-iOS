@@ -8,10 +8,12 @@
 
 import UIKit
 import Share
+import FacebookShare
+import FBSDKShareKit
 
 class ViewController: UIViewController {
     
-    @IBAction func share(){
+    @IBAction func share(_ button:UIButton){
         
         let shareDialog = UIAlertController(title: "Share", message: "Select sharing service", preferredStyle: .actionSheet)
         
@@ -39,11 +41,24 @@ class ViewController: UIViewController {
             self.retrieveVkUserInfo()
         })
         
+        shareDialog.addAction(actionWith(title: "Facebook") { _ in
+            self.shareByFacebook()
+            
+        })
+        
         shareDialog.addAction(actionWith(title: "Facebook user info") { _ in
             self.retrieveFbUserInfo()
         })
         
+        shareDialog.addAction(actionWith(title: "Facebook friends") { _ in
+            self.retrieveFbFriends()
+        })
+        
         shareDialog.addAction(actionWith(title: "Cancel", style: .cancel))
+        
+        shareDialog.popoverPresentationController?.sourceView = button
+        shareDialog.popoverPresentationController?.sourceRect = button.bounds
+        shareDialog.modalPresentationStyle = .popover
         
         present(shareDialog, animated: true, completion: nil)
     }
@@ -53,6 +68,55 @@ class ViewController: UIViewController {
     }
     
     //MARK: - Share
+    
+    func shareByFacebook(){
+        
+        func share() {
+            
+            let photo = FBSDKSharePhoto(image: #imageLiteral(resourceName: "sendimage"), userGenerated: true)!
+            photo.caption = "Let the show begin!"
+
+            let content = FBSDKSharePhotoContent()
+            
+            content.hashtag = FBSDKHashtag(string: .beInteractiveHashTag) 
+            content.photos  = [photo] as [Any]
+            
+            let shareDialog:FBSDKShareDialog = FBSDKShareDialog()
+
+            shareDialog.shareContent = content
+            shareDialog.fromViewController = self
+            shareDialog.mode = .automatic
+            
+            shareDialog.show()
+        }
+        
+        if Share.FacebookAuthoriser.isAuthorised {
+            share()
+            return
+        }
+        
+        AppDelegate.delegate.facebookAuthorizer.authWith(success: { _ in
+            
+            share()
+            
+        }) { error in
+            self.show(title: "Ошибка", message: "\(error)")
+        }
+    }
+    
+    func retrieveFbFriends() {
+        
+        let sharer = Share.Facebook(authoriser: AppDelegate.delegate.facebookAuthorizer)
+        
+        let request = Share.Facebook.Request(path: "/me",
+                                             parameters: ["fields" : "friends{name,id,picture{url}},picture.width(300).height(300){url},name" ],
+                                             paging: (Share.Facebook.PagesCount.unlimited,"friends"))
+        
+        sharer.make(request: request) { data in
+            print("friends:\(data)")
+        }
+        
+    }
     
     func retrieveFbUserInfo(){
         
@@ -98,7 +162,7 @@ class ViewController: UIViewController {
         let vkContent = Share.Vk.Item(text: "How are you?",
                                       images: [#imageLiteral(resourceName: "sendimage")],//)//,
                                       link: ("Be-Interactive",
-                                             URL(string:"http://be-interactive.ru/mobile")!))
+                                            URL.awesomeLink))
         
         sharer.shareBy(item: vkContent){ sharer, item, result in
             
@@ -158,4 +222,4 @@ class ViewController: UIViewController {
     }
     
 }
-
+// Коля пидОр

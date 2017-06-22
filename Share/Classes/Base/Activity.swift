@@ -18,6 +18,7 @@ extension Share {
         
         
         public func shareBy(item:Item, completion:((Completion)->Void)? = nil){
+            
             let vc = UIActivityViewController(activityItems: item.activityItems, applicationActivities: nil)
             vc.completionWithItemsHandler = { (_,finished,_,error) in
                 switch (finished,error)
@@ -29,7 +30,7 @@ extension Share {
                 case (_,.some(let error)):
                     completion?(sharer:self,item:item,result:ShareResult<Error>.error(error))
                 default:
-                    completion?(sharer:self,item:item,result:ShareResult<Error>.error(NSError()))
+                    completion?(sharer:self,item:item,result:ShareResult<Error>.error(NSError.unknownBaseError()))
                 }
             }
             item.vc.present(vc,animated:true,completion:nil)
@@ -41,4 +42,12 @@ extension Share {
         
     }
     
+}
+
+extension NSError {
+    
+    static func unknownBaseError()->NSError
+    {
+        return NSError(domain: "Share.Base", code: -2390523, userInfo: nil)
+    }
 }

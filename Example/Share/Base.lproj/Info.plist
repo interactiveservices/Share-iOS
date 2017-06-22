@@ -26,27 +26,27 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>vk6067711</string>
+			<string>vk60677110</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>vk6067711</string>
+				<string>vk60677110</string>
 			</array>
 		</dict>
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>fb1190440880988925</string>
+			<string>fb11904408809889250</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>fb1190440880988925</string>
+				<string>fb11904408809889250</string>
 			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>FacebookAppID</key>
-	<string>1190440880988925</string>
+	<string>11904408809889250</string>
 	<key>FacebookDisplayName</key>
 	<string>Привет Котаны</string>
 	<key>LSApplicationQueriesSchemes</key>
