@@ -24,7 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var vkAuthorizer:Share.VkAuthoriser!
     
-    var facebookAuthorizer = Share.FacebookAuthoriser(permissions: ["public_profile","email","user_friends"])
+    var facebookAuthorizer = Share.FacebookAuthoriser(permissions: ["public_profile","email","user_friends","user_posts"])
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         

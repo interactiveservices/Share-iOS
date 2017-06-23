@@ -28,7 +28,7 @@ extension Share {
         
         public struct Request {
             
-            public typealias Paging = (pageLimit:PagesCount, pagingKey:String)?
+            public typealias Paging = (pageLimit:PagesCount, pagingKey:String?)?
             public var path:String
             public var method:String
             public var parameters:[String:Any]?
@@ -154,13 +154,20 @@ extension Share {
                     
                 case (let data as [String:Any], _):
                     
+                    print("recieved:\(data.share_prettyJSONString())")
+                    
                     //add new data to old values
                     if let info = request.paging {
+
+                        let key = info?.pagingKey
+                            
+                        let oldData = request.result.fb_data(for: key) ?? [Any] ()
+                        let newData = data.fb_data(for: key) ?? [Any]()
                         
-                        let oldValues:[Any] = data.fb_data(for: info!.pagingKey) ?? [Any]()
-                        let newValues:[Any] = request.result[info!.pagingKey] as?  [Any] ?? [Any]()
                         
-                        request.result[info!.pagingKey] = newValues + oldValues
+                        
+                        request.result.fb_set(data: oldData + newData,
+                                              for: key)
                     }
                     else {
                         request.result = data
@@ -168,9 +175,10 @@ extension Share {
                     let shouldRequestNextPage = request.decrementPage()
                     
                     if shouldRequestNextPage,
-                        let nextKey = data.fb_nextLink {
+                        let nextKey = data.fb_nextLink,
+                        let nextParams = FBSDKUtility.dictionary(withQueryString: nextKey) as? [String : Any] {
                         
-                        request.path = nextKey
+                        request.parameters = nextParams
                         self.call(request: request, success: success, failure: failure)
                         
                         return
@@ -190,10 +198,26 @@ extension Share {
     }
 }
 
-extension Dictionary where Key == String  {
+extension Dictionary where Key == String, Value == Any  {
     
-    func fb_data(for key:String)->[Any]? {
-        return (self["data"] as? [String:Any])?[key] as? [Any]
+    func fb_data(for key:String?)->[Any]? {
+        
+        if  let key = key,
+            let info = (self[key] as? [String:Any]) {
+            return info["data"] as? [Any]
+        }
+        return self["data"] as? [Any]
+    }
+    
+    mutating func fb_set(data:[Any], for key:Key?) {
+        
+        if let aKey = key {
+            
+            self[aKey] = ["data" : data]
+            return
+        }
+        
+        self["data"] = data
     }
     
     var fb_nextLink:String? {

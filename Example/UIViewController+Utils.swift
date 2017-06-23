@@ -28,6 +28,6 @@ extension URL {
 
 extension String {
     
-    static let beInteractiveHashTag = "#beinteractive"
+    static let awesomeTag = "#beinteractive"
     
 }

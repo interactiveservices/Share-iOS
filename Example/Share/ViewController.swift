@@ -54,6 +54,10 @@ class ViewController: UIViewController {
             self.retrieveFbFriends()
         })
         
+        shareDialog.addAction(actionWith(title: "Facebook feed") { _ in
+            self.retrieveFbFeed()
+        })
+        
         shareDialog.addAction(actionWith(title: "Cancel", style: .cancel))
         
         shareDialog.popoverPresentationController?.sourceView = button
@@ -73,21 +77,18 @@ class ViewController: UIViewController {
         
         func share() {
             
-            let photo = FBSDKSharePhoto(image: #imageLiteral(resourceName: "sendimage"), userGenerated: true)!
-            photo.caption = "Let the show begin!"
+            let photo =  Photo(image: #imageLiteral(resourceName: "sendimage"),
+                                userGenerated: true)
 
-            let content = FBSDKSharePhotoContent()
+            var content = PhotoShareContent(photos:[photo])
+            content.hashtag = Hashtag(String.awesomeTag)
             
-            content.hashtag = FBSDKHashtag(string: .beInteractiveHashTag) 
-            content.photos  = [photo] as [Any]
-            
-            let shareDialog:FBSDKShareDialog = FBSDKShareDialog()
-
-            shareDialog.shareContent = content
-            shareDialog.fromViewController = self
-            shareDialog.mode = .automatic
-            
-            shareDialog.show()
+            _ = try? ShareDialog<PhotoShareContent>
+                     .show(from: self,
+                           content: content){ result in
+                            print("share result is:\n\(result)")
+                            
+            }
         }
         
         if Share.FacebookAuthoriser.isAuthorised {
@@ -104,16 +105,28 @@ class ViewController: UIViewController {
         }
     }
     
+    func retrieveFbFeed(){
+        let sharer = Share.Facebook(authoriser: AppDelegate.delegate.facebookAuthorizer)
+        
+        let request = Share.Facebook.Request(path: "/me/feed",
+                                             paging: (pageLimit:Share.Facebook.PagesCount.limited(10),
+                                                      pagingKey: Optional<String>.none))
+        sharer.make(request: request) { result in
+            print("feed\n:\(result)")
+        }
+    }
+    
     func retrieveFbFriends() {
         
         let sharer = Share.Facebook(authoriser: AppDelegate.delegate.facebookAuthorizer)
         
         let request = Share.Facebook.Request(path: "/me",
-                                             parameters: ["fields" : "friends{name,id,picture{url}},picture.width(300).height(300){url},name" ],
-                                             paging: (Share.Facebook.PagesCount.unlimited,"friends"))
+                                             parameters:["fields" : "friends{name,id,picture{url}},picture.width(300).height(300){url},name" ],
+                                             paging: (pageLimit:Share.Facebook.PagesCount.unlimited,
+                                                      pagingKey:Optional<String>.none))
         
         sharer.make(request: request) { data in
-            print("friends:\(data)")
+            print("friends\n:\(data)")
         }
         
     }

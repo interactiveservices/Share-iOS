@@ -36,17 +36,17 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>fb11904408809889250</string>
+			<string>fb1190440880988925</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>fb11904408809889250</string>
+				<string>fb1190440880988925</string>
 			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>FacebookAppID</key>
-	<string>11904408809889250</string>
+	<string>1190440880988925</string>
 	<key>FacebookDisplayName</key>
 	<string>Привет Котаны</string>
 	<key>LSApplicationQueriesSchemes</key>
