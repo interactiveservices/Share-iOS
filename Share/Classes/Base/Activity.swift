@@ -12,14 +12,15 @@ import UIKit
 extension Share {
     
     public struct Activity:Sharer {
-        public typealias Item = (activityItems:[Any], vc:UIViewController)
+        public typealias Item = [Any]
         public typealias Sender = Activity
         public typealias ShareError = Error
         
+        public var presentingController:UIViewController?
         
         public func shareBy(item:Item, completion:((Completion)->Void)? = nil){
             
-            let vc = UIActivityViewController(activityItems: item.activityItems, applicationActivities: nil)
+            let vc = UIActivityViewController(activityItems: item, applicationActivities: nil)
             vc.completionWithItemsHandler = { (_,finished,_,error) in
                 switch (finished,error)
                 {
@@ -33,11 +34,13 @@ extension Share {
                     completion?(sharer:self,item:item,result:ShareResult<Error>.error(NSError.unknownBaseError()))
                 }
             }
-            item.vc.present(vc,animated:true,completion:nil)
+            
+            UIViewController.share_present(viewController: vc,
+                                           from: self.presentingController)
         }
         
-        public init() {
-            
+        public init(presentingController:UIViewController? = nil) {
+            self.presentingController = presentingController
         }
         
     }

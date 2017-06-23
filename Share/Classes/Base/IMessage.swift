@@ -16,9 +16,15 @@ public protocol iMessageDelegate:class {
 extension Share {
     open class IMessage:NSObject,Sharer {
         
-        public typealias Item = (message:Message, vc:UIViewController)
+        public typealias Item = Message
         public typealias Sender = IMessage
         public typealias ShareError = MessageError
+        
+        public var presentingViewController:UIViewController?
+        
+        public init(presentingViewController:UIViewController? = nil){
+            self.presentingViewController = presentingViewController
+        }
         
         public func shareBy(item:Item, completion:((Completion)->Void)? = nil){
             self.completion = completion
@@ -28,13 +34,14 @@ extension Share {
                return
             }
             
-            let mvc = buildMessage(with: item.message)
+            let mvc = buildMessage(with: item)
             
             self.shareItem = item
             mvc.messageComposeDelegate = self
             retainSelf()
             
-            self.shareItem.vc.present(mvc, animated: true, completion: nil)
+            UIViewController.share_present(viewController: mvc,
+                                           from: self.presentingViewController)
         }
         
         public struct  Message {
@@ -65,7 +72,7 @@ extension Share {
         var objectToRetain:IMessage?
         
         fileprivate var completion:((Completion)->Void)?
-        fileprivate var shareItem:(message:Message, vc:UIViewController)!
+        fileprivate var shareItem:Message!
         
         fileprivate func callCompletion(_ result:ShareResult<MessageError>){
             self.completion?((sharer:self,

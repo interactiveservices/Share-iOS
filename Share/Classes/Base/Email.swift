@@ -13,9 +13,15 @@ extension Share {
     
     open class Email:NSObject,Sharer {
         
-        public typealias Item = (letter:Letter, vc:UIViewController)
+        public typealias Item = Letter
         public typealias Sender = Email
         public typealias ShareError = EmailError
+        
+        public var presentingViewController:UIViewController?
+        
+        public init(presentingViewController:UIViewController? = nil){
+            self.presentingViewController = presentingViewController
+        }
         
         open func shareBy(item: Item, completion: ((Completion)->Void)? = nil) {
             self.completion = completion
@@ -27,15 +33,16 @@ extension Share {
                 return
             }
             
-            let mvc = buildMailController(with: item.letter)
+            let mvc = buildMailController(with: item)
             mvc.mailComposeDelegate = self
             retainSelf()
             
-            item.vc.present(mvc, animated: true, completion: nil)
+            UIViewController.share_present(viewController: mvc,
+                                           from: presentingViewController)
         }
         
         fileprivate var completion:((Completion)->Void)?
-        fileprivate var shareItem:(letter:Letter, vc:UIViewController)!
+        fileprivate var shareItem:Letter!
         
         public struct Letter {
             var subject:String
@@ -45,6 +52,7 @@ extension Share {
             var body:String
             var bodyIsHTML = false
             var attachments:[Attachment]
+            
             public init(subject:String, recipients:[String],ccRecipients:[String]? = nil, bccRecipients:[String]? = nil, body:String, bodyIsHTML:Bool = false, attachments:[Attachment] = [])
             {
                 self.subject = subject

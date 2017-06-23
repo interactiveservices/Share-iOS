@@ -15,10 +15,10 @@ import Share
 
 //Share by message
 
-//in your view controller code. Assuming that self is ViewController subclass
+//For example add this in your view controller's button handling code. 
 
 let message = Share.IMessage.Message(recipients: ["somebodyPhonenumber"],body:"Hello, man!")
-Share.IMessage().shareBy(item: (message,self))
+Share.IMessage().shareBy(item: message)
 
 //more advanced usage 
  
@@ -30,7 +30,7 @@ Share.IMessage().shareBy(item: (message,self))
                                              body: "Hello. How are you?",
                                              attachments: [attachment])
         
-        Share.IMessage().shareBy(item: (message,self)) {  sharer,item,result in
+        Share.IMessage().shareBy(item: message) {  sharer,item,result in
             print("finished with:\nsharer\(sharer)\nitem:\(item)\nresult:\(result)")
         }
 //Mail
@@ -40,7 +40,7 @@ let letter = Share.Email.Letter(subject: "Hello test letter",
                                         body: "some body for Email",
                                         bodyIsHTML: false)
 
-Share.Email().shareBy(item:(latter,self))
+Share.Email().shareBy(item:latter)
 
 //General Activity ViewController
 
@@ -48,7 +48,7 @@ let shareElements:[Any] = ["stupid text",
                            URL(string:"https://github.com/interactiveservices/")!,
                            #imageLiteral(resourceName: "sendimage"), 
                            Date()]
-Share.Activity().shareBy(item:(shareElements,self))
+Share.Activity().shareBy(item:shareElements)
 ```
 
 ## Requirements

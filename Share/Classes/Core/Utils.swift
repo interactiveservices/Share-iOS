@@ -10,6 +10,14 @@ import UIKit
 
 extension UIViewController {
 
+    static func share_present(viewController:UIViewController, from parent:UIViewController? = nil){
+    
+        let vc = parent ?? self.share_topViewController()
+        assert(vc != nil)
+    
+        vc?.present(viewController, animated: true, completion: nil)
+    }
+    
     static func share_topViewController()->UIViewController? {
         return UIApplication.shared.keyWindow?.rootViewController
     }

@@ -202,7 +202,8 @@ class ViewController: UIViewController {
                                              body: "Hello. How are you?",
                                              attachments: [attachment])
         
-        Share.IMessage().shareBy(item: (message,self)) {  sharer,item,result in
+        Share.IMessage().shareBy(item: message) {  sharer,item,result in
+            
             print("finished with:\nsharer\(sharer)\nitem:\(item)\nresult:\(result)")
         }
     }
@@ -220,7 +221,9 @@ class ViewController: UIViewController {
                                         bodyIsHTML: false,
                                         attachments: [attachment])
         
-        Share.Email().shareBy(item: (letter,self)){ sharer,item,result in
+        
+        Share.Email()
+            .shareBy(item: letter){ sharer,item,result in
             
             print("finished with:\nsharer\(sharer)\nitem:\(item)\nresult:\(result)")
             
@@ -229,9 +232,12 @@ class ViewController: UIViewController {
     
     func shareByActivity(){
         let shareElements:[Any] = ["stupid text",URL(string:"http://be-interactive.ru/mobile/")!,#imageLiteral(resourceName: "sendimage"), Date()]
-        Share.Activity().shareBy(item:(shareElements,
-                                       self)) { sharer,item,result in
-                                        print("finished with:\nsharer\(sharer)\nitem:\(item)\nresult:\(result)")}
+        
+        Share.Activity()
+            .shareBy(item:shareElements) { sharer,item,result in
+                
+                print("finished with:\nsharer\(sharer)\nitem:\(item)\nresult:\(result)")
+        }
     }
     
 }
